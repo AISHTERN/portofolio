@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design tokens, tema terang. Format "R G B" agar mendukung opacity Tailwind. */
+:root {
+  --color-canvas: 250 250 247; /* #FAFAF7 gading hangat */
+  --color-surface: 255 255 255; /* #FFFFFF */
+  --color-ink: 22 24 29; /* #16181D */
+  --color-muted: 91 98 112; /* #5B6270 */
+  --color-line: 232 230 223; /* #E8E6DF */
+  --color-accent: 29 78 216; /* #1D4ED8 biru, selaras dengan latar foto */
+  --color-accent-soft: 232 238 251; /* #E8EEFB */
+  color-scheme: light;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Agar judul section tidak tertutup navbar sticky saat menggulir ke anchor. */
+    scroll-padding-top: 4.5rem;
+  }
+
+  body {
+    @apply bg-canvas font-sans text-ink antialiased;
+    /* Pengaman: elemen yang sedikit keluar layar (mis. ikon mengambang) tidak memunculkan scroll samping. */
+    overflow-x: clip;
+  }
+
+}
+
+/* Ikon skill mengambang (FloatingIcon). Hanya transform, jadi murah di GPU. */
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+.float-icon {
+  animation: float-y var(--float-duration, 4s) ease-in-out var(--float-delay, 0s)
+    infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float-icon {
+    animation: none;
+    will-change: auto;
+  }
+}
+
+/* Reduced motion: matikan semua gerakan (transisi, animasi, smooth scroll). */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
